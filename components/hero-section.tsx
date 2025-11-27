@@ -57,7 +57,7 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-900">Average task payout</p>
-                <p className="text-xs text-gray-600 mt-1">$180 per project</p>
+                <p className="text-xs text-gray-600 mt-1">₹3000 - ₹12000 per project</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
