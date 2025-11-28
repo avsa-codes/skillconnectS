@@ -4,18 +4,18 @@ export default function HowItWorks() {
   const steps = [
     {
       number: "1",
-      title: "Create Profile",
-      description: "Tell us about your skills, interests, and availability in a simple profile.",
+      title: "Apply & Get Verified",
+      description: "Create your profile with your skills, availability, and basic details. Our team quickly screens and verifies you so companies can fully trust your profile.",
     },
     {
       number: "2",
-      title: "Get Verified",
-      description: "We quickly review your details so companies can trust your profile.",
+      title: "Get Matched to Paid Tasks & Internships",
+      description: "Get curated paid tasks and internship-focused micro projects that match your skills and come from verified companies.",
     },
     {
       number: "3",
-      title: "Get Matched & Paid",
-      description: "Receive curated task offers, complete projects, and get paid securely.",
+      title: "Work, Earn & Build Your Experience",
+      description: "Complete tasks, earn securely, and gain experience that strengthens your portfolio and improves your internship prospects.",
     },
   ]
 

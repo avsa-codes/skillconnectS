@@ -24,7 +24,7 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
   const [loading, setLoading] = useState(false)
 
   const skillOptions = [
-    "Design",
+    "Social Media",
     "Graphic Design",
     "UI/UX",
     "Content Writing",
@@ -35,7 +35,7 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
     "Data Entry",
     "Event Support",
     "Campus Ambassador Work",
-    "Social Media",
+    "Others",
   ]
 
   const handleSkillChange = (skill: string) => {
