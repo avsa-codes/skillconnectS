@@ -43,9 +43,13 @@ export default function Navigation({ onRegister, onHowItWorks, onRoles }: Naviga
         >
           Roles
         </button>
-        <button className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors hidden md:block">
-          For companies
-        </button>
+        <button
+  onClick={() => window.location.href = "https://skillconnect-o.vercel.app/"}
+  className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors hidden md:block"
+>
+  For companies
+</button>
+
         <Button
           onClick={onRegister}
           className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-6 py-2 rounded-lg transition-colors"
