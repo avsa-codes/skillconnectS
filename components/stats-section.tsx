@@ -23,7 +23,6 @@ export default function StatsSection() {
     let last = lastUpdated ? parseInt(lastUpdated) : 0
     const now = Date.now()
 
-    // If more than 1 hour passed → increase numbers
     if (now - last > INTERVAL_HOURS * 60 * 60 * 1000) {
       currentStats = {
         christ: currentStats.christ + INCREMENT,
@@ -39,7 +38,6 @@ export default function StatsSection() {
     setStats(currentStats)
   }, [])
 
-  // Prepare sorted leaderboard
   const entries = [
     { label: "Christites", value: stats.christ },
     { label: "Josephites", value: stats.josephs },
@@ -50,7 +48,19 @@ export default function StatsSection() {
   const sorted = [...entries].sort((a, b) => b.value - a.value)
 
   return (
-    <section className="w-full py-16 bg-gray-50">
+    <section className="w-full py-20 bg-gray-50 relative">
+
+      {/* LIVE badge */}
+      <div
+        className="
+          absolute -top-3 left-1/2 -translate-x-1/2
+          bg-orange-500 text-white px-4 py-1 text-sm font-semibold 
+          rounded-full shadow-md animate-pulse
+        "
+      >
+        LIVE
+      </div>
+
       <h2 className="text-center text-3xl md:text-4xl font-bold mb-10 text-gray-900">
         Thousands Are Signing Up. Where Does Your College Stand?
       </h2>
@@ -69,12 +79,11 @@ export default function StatsSection() {
   )
 }
 
-// Badge colors based on rank
 const badgeStyles: Record<number, string> = {
-  1: "bg-yellow-400 text-white",     // Gold
-  2: "bg-gray-300 text-gray-800",    // Silver
-  3: "bg-amber-700 text-white",      // Bronze
-  4: "bg-gray-200 text-gray-600",    // Others
+  1: "bg-yellow-400 text-white",
+  2: "bg-gray-300 text-gray-800",
+  3: "bg-amber-700 text-white",
+  4: "bg-gray-200 text-gray-600",
 }
 
 function StatCard({
@@ -90,8 +99,9 @@ function StatCard({
     <div
       className="
         relative bg-white p-8 rounded-2xl shadow-md 
-        hover:shadow-xl transition-all duration-300 
-        hover:scale-105 cursor-pointer
+        hover:shadow-[0_0_20px_rgba(255,115,40,0.35)]
+        hover:scale-105 transition-all duration-300 
+        cursor-pointer
       "
     >
       {/* Rank Badge */}
@@ -109,3 +119,4 @@ function StatCard({
     </div>
   )
 }
+

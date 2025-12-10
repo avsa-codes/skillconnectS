@@ -12,6 +12,8 @@ import RolesAvailable from "@/components/roles-available"
 import EarlyAccess from "@/components/early-access"
 import Footer from "@/components/footer"
 import RegistrationModal from "@/components/registration-modal"
+import StatsSection from "@/components/stats-section"
+
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -29,8 +31,25 @@ const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
         onHowItWorks={() => scrollToSection(howItWorksRef)}
         onRoles={() => scrollToSection(rolesRef)}
       />
+
+
+
+
+
+
+
+
       <HeroSection onRegister={() => setIsModalOpen(true)} />
       <div ref={howItWorksRef}>
+
+
+<StatsSection />   {/* ← ADD THIS */}
+
+<div ref={howItWorksRef}>
+  <HowItWorks />
+</div>
+
+
         <HowItWorks />
       </div>
       <WhySkillConnect />
