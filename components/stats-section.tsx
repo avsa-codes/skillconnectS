@@ -1,122 +1,224 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { Medal } from "lucide-react"
 
-const BASE_STATS = {
-  christ: 150,
-  josephs: 120,
-  jain: 180,
-  carmel: 90,
+type CollegeStat = {
+  college: string
+  count: number
 }
 
-const INCREMENT = 5          // increase per hour
-const INTERVAL_HOURS = 1     // every 1 hour
+type StatsSectionProps = {
+  onRegister: () => void
+}
 
-export default function StatsSection() {
-  const [stats, setStats] = useState(BASE_STATS)
+/* =========================
+   MAIN LEADERBOARD (TOP 4)
+========================= */
+
+const BASE_STATS: CollegeStat[] = [
+  { college: "St. Joseph’s University", count: 92 },
+  { college: "Christ University", count: 71 },
+  { college: "BMSCE", count: 54 },
+  { college: "Jain University", count: 33 },
+]
+
+/* =========================
+   RUNNER-UP COLLEGES
+========================= */
+
+const RUNNER_UPS: CollegeStat[] = [
+  { college: "RVCE", count: 21 },
+  { college: "PES University", count: 18 },
+]
+
+const MAX_INCREMENT = 2
+const INTERVAL_HOURS = 3
+
+export default function StatsSection({ onRegister }: StatsSectionProps) {
+  const [stats, setStats] = useState<CollegeStat[]>(BASE_STATS)
 
   useEffect(() => {
-    const stored = localStorage.getItem("skillconnect_stats")
-    const lastUpdated = localStorage.getItem("skillconnect_last_update")
-
-    let currentStats = stored ? JSON.parse(stored) : BASE_STATS
-    let last = lastUpdated ? parseInt(lastUpdated) : 0
+    const stored = localStorage.getItem("sc_college_stats")
+    const lastUpdated = localStorage.getItem("sc_stats_last_update")
     const now = Date.now()
 
-    if (now - last > INTERVAL_HOURS * 60 * 60 * 1000) {
-      currentStats = {
-        christ: currentStats.christ + INCREMENT,
-        josephs: currentStats.josephs + INCREMENT,
-        jain: currentStats.jain + INCREMENT,
-        carmel: currentStats.carmel + INCREMENT,
-      }
+    let current: CollegeStat[] = stored
+      ? JSON.parse(stored)
+      : BASE_STATS
 
-      localStorage.setItem("skillconnect_stats", JSON.stringify(currentStats))
-      localStorage.setItem("skillconnect_last_update", now.toString())
+    const last = lastUpdated ? parseInt(lastUpdated) : 0
+
+    if (now - last > INTERVAL_HOURS * 60 * 60 * 1000) {
+      current = current.map((item) => {
+        const shouldGrow = Math.random() > 0.5
+        const inc = shouldGrow
+          ? Math.floor(Math.random() * (MAX_INCREMENT + 1))
+          : 0
+
+        return {
+          ...item,
+          count: item.count + inc,
+        }
+      })
+
+      localStorage.setItem(
+        "sc_college_stats",
+        JSON.stringify(current)
+      )
+      localStorage.setItem(
+        "sc_stats_last_update",
+        now.toString()
+      )
     }
 
-    setStats(currentStats)
+    current.sort((a, b) => b.count - a.count)
+    setStats(current)
   }, [])
 
-  const entries = [
-    { label: "Christites", value: stats.christ },
-    { label: "Josephites", value: stats.josephs },
-    { label: "Jains", value: stats.jain },
-    { label: "Carmelites", value: stats.carmel },
-  ]
-
-  const sorted = [...entries].sort((a, b) => b.value - a.value)
-
   return (
-    <section className="w-full py-20 bg-gray-50 relative">
-
-      {/* LIVE badge */}
-      <div
-        className="
-          absolute -top-3 left-1/2 -translate-x-1/2
-          bg-orange-500 text-white px-4 py-1 text-sm font-semibold 
-          rounded-full shadow-md animate-pulse
-        "
-      >
-        LIVE
+    <section className="relative py-24 bg-gradient-to-b from-white to-gray-50">
+      {/* Updating badge */}
+      <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+        <span className="flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1 text-sm font-semibold rounded-full border border-orange-200">
+          <span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
+          Updating
+        </span>
       </div>
 
-      <h2 className="text-center text-3xl md:text-4xl font-bold mb-10 text-gray-900">
-        Thousands Are Signing Up. Where Does Your College Stand?
-      </h2>
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Heading */}
+        <h2 className="text-center text-3xl md:text-4xl font-bold text-gray-900">
+          Top Colleges by Early Access Registrations
+        </h2>
 
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        {sorted.map((item, index) => (
-          <StatCard
-            key={item.label}
-            label={item.label}
-            value={item.value}
-            rank={index + 1}
-          />
-        ))}
+        <p className="mt-3 text-center text-gray-600 max-w-2xl mx-auto">
+          Ranked by early access registrations from students
+        </p>
+
+        {/* Top 4 grid */}
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {stats.slice(0, 4).map((item, index) => (
+            <StatCard
+              key={item.college}
+              rank={index + 1}
+              college={item.college}
+              count={item.count}
+            />
+          ))}
+        </div>
+
+        {/* Runner-ups */}
+        <div className="mt-12 text-center">
+          <p className="text-sm font-semibold text-gray-600 mb-4">
+            Runner-up colleges
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            {RUNNER_UPS.map((item) => (
+              <div
+                key={item.college}
+                className="
+                  px-4 py-2 rounded-full
+                  bg-gray-100 text-gray-700 text-sm
+                  border border-gray-200
+                "
+              >
+                <span className="font-medium">
+                  {item.college}
+                </span>{" "}
+                <span className="text-gray-500">
+                  · {item.count} students
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="mt-14 flex flex-col items-center">
+          <button
+            onClick={onRegister}
+            className="
+              px-6 py-3 rounded-xl
+              bg-orange-600 text-white font-semibold
+              hover:bg-orange-700 transition
+              shadow-sm
+            "
+          >
+            Join your college
+          </button>
+
+          <p className="mt-2 text-sm text-gray-500">
+            Takes less than a minute
+          </p>
+        </div>
       </div>
     </section>
   )
 }
 
-const badgeStyles: Record<number, string> = {
-  1: "bg-yellow-400 text-white",
-  2: "bg-gray-300 text-gray-800",
-  3: "bg-amber-700 text-white",
-  4: "bg-gray-200 text-gray-600",
-}
+/* =========================
+   STAT CARD
+========================= */
 
 function StatCard({
-  label,
-  value,
   rank,
+  college,
+  count,
 }: {
-  label: string
-  value: number
   rank: number
+  college: string
+  count: number
 }) {
+  const medalStyles: Record<number, string> = {
+    1: "bg-yellow-100 text-yellow-800 border-yellow-300",
+    2: "bg-gray-100 text-gray-700 border-gray-300",
+    3: "bg-amber-100 text-amber-800 border-amber-300",
+  }
+
   return (
     <div
       className="
-        relative bg-white p-8 rounded-2xl shadow-md 
-        hover:shadow-[0_0_20px_rgba(255,115,40,0.35)]
-        hover:scale-105 transition-all duration-300 
-        cursor-pointer
+        relative bg-white rounded-2xl p-8
+        border border-gray-100
+        shadow-sm hover:shadow-lg
+        transition-all duration-300
+        hover:-translate-y-1
       "
     >
-      {/* Rank Badge */}
-      <div
-        className={`
-          absolute -top-3 -right-3 px-3 py-1 text-sm font-bold rounded-full
-          ${badgeStyles[rank]}
-        `}
-      >
-        #{rank}
+      {/* Rank badge */}
+      <div className="absolute -top-4 -right-4">
+        {rank <= 3 ? (
+          <div
+            className={`
+              flex items-center gap-1 px-3 py-1 rounded-full
+              text-xs font-semibold border
+              ${medalStyles[rank]}
+            `}
+          >
+            <Medal className="h-4 w-4" />
+            #{rank}
+          </div>
+        ) : (
+          <div className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+            #{rank}
+          </div>
+        )}
       </div>
 
-      <p className="text-4xl font-extrabold text-orange-600">{value}+</p>
-      <p className="mt-2 text-gray-800 font-semibold text-lg">{label}</p>
+      <div className="text-center">
+        <p className="text-5xl font-extrabold text-orange-600">
+          {count}
+        </p>
+        <p className="mt-1 text-sm text-gray-500">
+          students
+        </p>
+
+        <p className="mt-4 text-lg font-semibold text-gray-900">
+          {college}
+        </p>
+      </div>
     </div>
   )
 }
-

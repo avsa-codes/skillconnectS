@@ -39,7 +39,7 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-900">Student profile strength</p>
-                <p className="text-xs text-gray-600 mt-1">92% average completion rate</p>
+                <p className="text-xs text-gray-600 mt-1">Minimum 80% profile completion required</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -48,7 +48,7 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-900">Verified companies</p>
-                <p className="text-xs text-gray-600 mt-1">84 trusted partners</p>
+                <p className="text-xs text-gray-600 mt-1">10+ Verified and onboarded Organizations</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -57,7 +57,7 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-900">Average task payout</p>
-                <p className="text-xs text-gray-600 mt-1">₹3000 - ₹12000 per project</p>
+                <p className="text-xs text-gray-600 mt-1">₹1000 - ₹10000 per project</p>
               </div>
             </div>
             <div className="flex items-start gap-4">

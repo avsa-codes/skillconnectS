@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-
 import { useRef, useState } from "react"
+
 import Navigation from "@/components/navigation"
 import HeroSection from "@/components/hero-section"
 import HowItWorks from "@/components/how-it-works"
@@ -13,16 +13,17 @@ import EarlyAccess from "@/components/early-access"
 import Footer from "@/components/footer"
 import RegistrationModal from "@/components/registration-modal"
 import StatsSection from "@/components/stats-section"
-
+import Section from "@/components/section"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+
   const howItWorksRef = useRef<HTMLDivElement>(null)
   const rolesRef = useRef<HTMLDivElement>(null)
 
-const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
-  ref.current?.scrollIntoView({ behavior: "smooth" })
-}
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
+    ref.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
   return (
     <main className="min-h-screen bg-white">
@@ -32,34 +33,47 @@ const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
         onRoles={() => scrollToSection(rolesRef)}
       />
 
-
-
-
-
-
-
-
+      {/* HERO stays as-is */}
       <HeroSection onRegister={() => setIsModalOpen(true)} />
-      <div ref={howItWorksRef}>
 
+      {/* STATS (already controls its own spacing) */}
+      <StatsSection onRegister={() => setIsModalOpen(true)} />
 
-<StatsSection />   {/* ← ADD THIS */}
+      {/* HOW IT WORKS */}
+      <Section>
+        <div ref={howItWorksRef}>
+          <HowItWorks />
+        </div>
+      </Section>
 
-<div ref={howItWorksRef}>
-  <HowItWorks />
-</div>
+      {/* WHY */}
+      <Section>
+        <WhySkillConnect />
+      </Section>
 
+      {/* WHO */}
+      <Section>
+        <WhoCanApply />
+      </Section>
 
-        <HowItWorks />
-      </div>
-      <WhySkillConnect />
-      <WhoCanApply />
-      <div ref={rolesRef}>
-        <RolesAvailable />
-      </div>
-      <EarlyAccess onRegister={() => setIsModalOpen(true)} />
+      {/* ROLES */}
+      <Section>
+        <div ref={rolesRef}>
+          <RolesAvailable />
+        </div>
+      </Section>
+
+      {/* EARLY ACCESS */}
+      <Section>
+        <EarlyAccess onRegister={() => setIsModalOpen(true)} />
+      </Section>
+
       <Footer />
-      <RegistrationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      <RegistrationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   )
 }

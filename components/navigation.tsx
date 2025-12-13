@@ -44,7 +44,7 @@ export default function Navigation({ onRegister, onHowItWorks, onRoles }: Naviga
           Roles
         </button>
         <button
-  onClick={() => window.location.href = "https://skillconnect-o.vercel.app/"}
+  onClick={() => window.location.href = "https://organizations-onboarding.instatask.in"}
   className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors hidden md:block"
 >
   For companies
