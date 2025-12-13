@@ -13,13 +13,15 @@ interface RegistrationModalProps {
 }
 
 export default function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    phoneNumber: "",
-    email: "",
-    college: "",
-    skills: [] as string[],
-  })
+ const [formData, setFormData] = useState({
+  fullName: "",
+  phoneNumber: "",
+  email: "",
+  college: "",
+  availability: "",
+  skills: [] as string[],
+})
+
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -61,13 +63,15 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
  const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault()
 
-  if (
-    !formData.fullName ||
-    !formData.phoneNumber ||
-    !formData.email ||
-    !formData.college ||
-    formData.skills.length === 0
-  ) {
+ if (
+  !formData.fullName ||
+  !formData.phoneNumber ||
+  !formData.email ||
+  !formData.college ||
+  !formData.availability ||
+  formData.skills.length === 0
+)
+ {
     alert("Please fill all fields and select at least one skill.")
     return
   }
@@ -76,15 +80,17 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
 
   const { data, error } = await supabase
     .from("registrations-s") // your table
-    .insert([
-      {
-        full_name: formData.fullName,
-        phone_number: formData.phoneNumber,
-        email: formData.email,
-        college: formData.college,
-        skills: formData.skills, // JSONB column
-      },
-    ])
+  .insert([
+  {
+    full_name: formData.fullName,
+    phone_number: formData.phoneNumber,
+    email: formData.email,
+    college: formData.college,
+    availability: formData.availability,
+    skills: formData.skills,
+  },
+])
+
 
   setLoading(false)
 
@@ -96,7 +102,15 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
     setTimeout(() => {
       onClose()
       setSubmitted(false)
-      setFormData({ fullName: "", phoneNumber: "", email: "", college: "", skills: [] })
+      setFormData({
+  fullName: "",
+  phoneNumber: "",
+  email: "",
+  college: "",
+  availability: "",
+  skills: [],
+})
+
     }, 3000)
   }
 }
@@ -176,6 +190,41 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
                   placeholder="Your college/university"
                 />
               </div>
+
+<div>
+  <label className="block text-sm font-medium text-gray-900 mb-2">
+    Availability *
+  </label>
+
+  <select
+    required
+    value={formData.availability}
+    onChange={(e) =>
+      setFormData((prev) => ({
+        ...prev,
+        availability: e.target.value,
+      }))
+    }
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white
+      focus:outline-none focus:border-orange-500
+      focus:ring-1 focus:ring-orange-500"
+  >
+    <option value="">Select availability</option>
+    <option value="<10 hrs/week">Less than 10 hrs/week</option>
+    <option value="10–20 hrs/week">10–20 hrs/week</option>
+    <option value="20+ hrs/week">20+ hrs/week</option>
+  </select>
+
+  <p className="text-xs text-gray-500 mt-1">
+    Helps us match you with suitable tasks
+  </p>
+</div>
+
+
+
+
+
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-900 mb-3">Primary Skills *</label>
